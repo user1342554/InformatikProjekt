@@ -1,3 +1,54 @@
 # Godot 4+ specific ignores
 .godot/
-/android/
+
+# Mono-specific ignores
+.mono/
+data_*/
+mono_crash.*.json
+
+# C# / .NET specific ignores
+bin/
+obj/
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.sln.docstates
+*.csproj.user
+*.DotSettings.user
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio cache/options
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Rider
+.idea/
+*.sln.iml
+
+# Visual Studio Code
+.vscode/
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# System
+.DS_Store
+Thumbs.db

@@ -154,20 +154,31 @@ func _apply_all_settings():
 	print("Graphics settings applied successfully")
 
 func _apply_shadow_settings():
+	# Shadow quality settings
 	var viewport = get_viewport()
 	if not viewport:
 		return
 	
 	match shadow_quality:
-		0:  # Off
+		0:  # Off - keine Schatten
+			viewport.positional_shadow_atlas_size = 0
 			RenderingServer.directional_shadow_atlas_set_size(512, false)
-			RenderingServer.set_default_clear_color(Color(0.1, 0.1, 0.15))
+			print("Shadows: OFF")
 		1:  # Low
-			RenderingServer.directional_shadow_atlas_set_size(2048, false)
+			viewport.positional_shadow_atlas_size = 2048
+			viewport.positional_shadow_atlas_16_bits = true
+			RenderingServer.directional_shadow_atlas_set_size(2048, true)
+			print("Shadows: LOW (2048)")
 		2:  # Medium
+			viewport.positional_shadow_atlas_size = 4096
+			viewport.positional_shadow_atlas_16_bits = false
 			RenderingServer.directional_shadow_atlas_set_size(4096, false)
+			print("Shadows: MEDIUM (4096)")
 		3:  # High
-			RenderingServer.directional_shadow_atlas_set_size(8192, true)
+			viewport.positional_shadow_atlas_size = 8192
+			viewport.positional_shadow_atlas_16_bits = false
+			RenderingServer.directional_shadow_atlas_set_size(8192, false)
+			print("Shadows: HIGH (8192)")
 
 func _apply_aa_settings():
 	var viewport = get_viewport()
@@ -207,7 +218,8 @@ func _apply_post_processing():
 		return
 	
 	# Glow
-	viewport.use_debanding = glow_enabled
+	# Enable debanding to prevent color posterization/banding
+	viewport.use_debanding = true
 	
 	# Note: SSAO, SSR need to be set in WorldEnvironment
 	# This is a placeholder for those settings

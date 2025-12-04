@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://knight_character_skin_001"]
+
+[ext_resource type="Script" path="res://player/knight_character_skin.gd" id="1"]
+[ext_resource type="PackedScene" path="res://player/MCKnight/knight.fbx" id="2_knight"]
+
+[sub_resource type="BoxShape3D" id="hitbox_shape"]
+size = Vector3(0.8, 0.3, 1.2)
+
+[node name="KnightCharacterSkin" type="Node3D"]
+script = ExtResource("1")
+
+[node name="knight" parent="." instance=ExtResource("2_knight")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="WeaponSocket" type="BoneAttachment3D" parent="knight/Armature/Skeleton3D"]
+bone_name = "mixamorig:RightHand"
+bone_idx = -1
+
+[node name="MeleeHitbox" type="Area3D" parent="knight/Armature/Skeleton3D/WeaponSocket"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.6)
+collision_layer = 0
+collision_mask = 4
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="knight/Armature/Skeleton3D/WeaponSocket/MeleeHitbox"]
+shape = SubResource("hitbox_shape")
