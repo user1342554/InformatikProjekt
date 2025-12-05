@@ -6,6 +6,7 @@ extends CanvasLayer
 @onready var stamina_bar = $CombatStats/StaminaBar
 @onready var stamina_label = $CombatStats/StaminaBar/StaminaLabel
 @onready var pause_menu = $PauseMenu
+@onready var fps_counter = $FPSCounter
 
 func _ready():
 	add_to_group("game_ui")  # For pause menu to find us
@@ -16,14 +17,39 @@ func _ready():
 	# Connect pause menu signals
 	if pause_menu:
 		pause_menu.disconnect_pressed.connect(_on_disconnect_pressed)
+	
+	# Listen for settings changes
+	GraphicsSettings.settings_changed.connect(_on_settings_changed)
+	_update_fps_visibility()
 
 func _process(_delta):
 	# Update stats every frame
 	_update_ui()
+	_update_fps()
 
 func _on_disconnect_pressed():
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	NetworkManager.disconnect_from_game()
+
+func _update_fps():
+	if fps_counter and fps_counter.visible:
+		var fps = Engine.get_frames_per_second()
+		fps_counter.text = "FPS: %d" % fps
+		
+		# Color based on performance
+		if fps >= 60:
+			fps_counter.modulate = Color(0.2, 1.0, 0.4)  # Green
+		elif fps >= 30:
+			fps_counter.modulate = Color(1.0, 0.8, 0.0)  # Yellow
+		else:
+			fps_counter.modulate = Color(1.0, 0.3, 0.2)  # Red
+
+func _update_fps_visibility():
+	if fps_counter:
+		fps_counter.visible = GraphicsSettings.show_fps_counter
+
+func _on_settings_changed():
+	_update_fps_visibility()
 
 func _update_ui():
 	var local_player = NetworkManager.get_local_player()
